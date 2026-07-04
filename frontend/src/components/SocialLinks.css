@@ -1,0 +1,76 @@
+.social-card {
+
+    background: white;
+
+    width: 700px;
+
+    padding: 35px;
+
+    border-radius: 24px;
+
+    box-shadow: 0 15px 40px rgba(0,0,0,.18);
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 40px;
+}
+
+.social-links {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 24px;
+
+    flex: 1;
+}
+
+.social-links a {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    text-decoration: none;
+
+    color: #222;
+
+    font-size: 24px;
+
+    transition: .2s;
+}
+
+.social-links a:hover {
+
+    transform: translateX(6px);
+}
+
+.social-links svg {
+
+    font-size: 34px;
+}
+
+.logo-container {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+}
+
+.logo-container img {
+
+    width: 200px;
+
+    height: auto;
+
+    display: block;
+}
