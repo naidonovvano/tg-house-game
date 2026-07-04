@@ -11,7 +11,12 @@ import "./SocialLinks.css";
 export default function SocialLinks() {
     return (
         <div className="social-card">
-
+            <div className="logo-container">
+                <img
+                    src={logo}
+                    alt="Monet & Manet"
+                />
+            </div>
             <div className="social-links">
 
                 <a
@@ -42,14 +47,6 @@ export default function SocialLinks() {
                 </a>
 
             </div>
-
-            <div className="logo-container">
-                <img
-                    src={logo}
-                    alt="Monet & Manet"
-                />
-            </div>
-
         </div>
     );
 }
