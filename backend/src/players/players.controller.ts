@@ -9,9 +9,10 @@ export class PlayersController {
   ) {}
 
     @Get()
-    async getPlayers() {
-    return this.playersService.getPlayers();
-    }
+async getPlayers() {
+  console.log('=== GET /players ===');
+  return this.playersService.getPlayers();
+}
     @Get(':telegramId')
     async getPlayer(
         @Param('telegramId') telegramId: string,

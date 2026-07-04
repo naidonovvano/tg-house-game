@@ -2,25 +2,28 @@ import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { PlayersModule } from './players/players.module';
 import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
-    }),
+     isGlobal: true,
+     envFilePath:
+       process.env.NODE_ENV === 'docker'
+         ? '.env.docker'
+         : '.env',
+     }),
     
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../../frontend/dist'),
-    }),
-
+    //ServeStaticModule.forRoot({
+    //rootPath: join(__dirname, '../frontend/dist'),
+    //}),
+ServeStaticModule.forRoot({
+  rootPath: join(__dirname, '../frontend/dist'),
+  exclude: ['/players*'],
+}),
     DatabaseModule,
     PlayersModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}

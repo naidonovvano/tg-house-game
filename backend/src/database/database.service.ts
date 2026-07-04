@@ -28,6 +28,12 @@ export class DatabaseService implements OnModuleInit {
   }
 
   async query(sql: string, params: any[] = []): Promise<QueryResult> {
-    return this.client.query(sql, params);
-  }
+  console.log('Executing SQL:', sql);
+
+  const result = await this.client.query(sql, params);
+
+  console.log('SQL finished');
+
+  return result;
+}
 }

@@ -30,7 +30,27 @@ services:
 
     volumes:
       - pgadmin_data:/var/lib/pgadmin
+  backend:
 
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+
+    container_name: game_backend
+
+    restart: always
+
+    environment:
+
+      NODE_ENV: docker
+
+    ports:
+
+      - "3000:3000"
+
+    depends_on:
+
+      - postgres
 volumes:
   postgres_data:
   pgadmin_data:
