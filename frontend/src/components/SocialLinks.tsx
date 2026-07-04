@@ -25,7 +25,7 @@ export default function SocialLinks() {
                     rel="noreferrer"
                 >
                     <FaYoutube />
-                    <span>YouTube: Monet & Manet Cats</span>
+                    <span>Monet & Manet Cats</span>
                 </a>
 
                 <a
@@ -34,7 +34,7 @@ export default function SocialLinks() {
                     rel="noreferrer"
                 >
                     <FaInstagram />
-                    <span>Instagram: @monet_manet_cats</span>
+                    <span>@monet_manet_cats</span>
                 </a>
 
                 <a
@@ -43,7 +43,7 @@ export default function SocialLinks() {
                     rel="noreferrer"
                 >
                     <FaTelegramPlane />
-                    <span>Telegram: @monet_manet</span>
+                    <span>@monet_manet</span>
                 </a>
 
             </div>
