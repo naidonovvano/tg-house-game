@@ -15,13 +15,10 @@ import { DatabaseModule } from './database/database.module';
          : '.env',
      }),
     
-    //ServeStaticModule.forRoot({
-    //rootPath: join(__dirname, '../frontend/dist'),
-    //}),
-ServeStaticModule.forRoot({
-  rootPath: join(__dirname, '../frontend/dist'),
-  exclude: ['/players*'],
-}),
+    ServeStaticModule.forRoot({
+    rootPath: join(__dirname, '../frontend/dist'),
+    }),
+    
     DatabaseModule,
     PlayersModule,
   ],

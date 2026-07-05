@@ -10,7 +10,6 @@ export class PlayersController {
 
     @Get()
 async getPlayers() {
-  console.log('=== GET /players ===');
   return this.playersService.getPlayers();
 }
     @Get(':telegramId')
