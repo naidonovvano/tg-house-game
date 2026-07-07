@@ -1,12 +1,12 @@
 {
   "hosting": {
-    "public": "frontend/dist",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "public": "firebase-public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
+      {
+        "source": "/gametap/**",
+        "destination": "/gametap/index.html"
+      },
       {
         "source": "**",
         "destination": "/index.html"

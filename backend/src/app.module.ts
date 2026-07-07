@@ -8,17 +8,14 @@ import { DatabaseModule } from './database/database.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-     isGlobal: true,
-     envFilePath:
-       process.env.NODE_ENV === 'docker'
-         ? '.env.docker'
-         : '.env',
-     }),
-    
-    ServeStaticModule.forRoot({
-    rootPath: join(__dirname, '../frontend/dist'),
+      isGlobal: true,
+      envFilePath: process.env.NODE_ENV === 'docker' ? '.env.docker' : '.env',
     }),
-    
+
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../frontend/dist'),
+    }),
+
     DatabaseModule,
     PlayersModule,
   ],

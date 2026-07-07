@@ -12,15 +12,15 @@ export class DatabaseService implements OnModuleInit {
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-});
+    });
   }
 
   async onModuleInit() {
     try {
       await this.client.connect();
-        console.log('!!! Connected to PostgreSQL !!!');
-        const result = await this.query('SELECT NOW();');
-        console.log(result.rows);
+      console.log('!!! Connected to PostgreSQL !!!');
+      const result = await this.query('SELECT NOW();');
+      console.log(result.rows);
     } catch (error) {
       console.error('xxx Failed to connect to PostgreSQL xxx');
       console.error(error);
@@ -28,11 +28,10 @@ export class DatabaseService implements OnModuleInit {
   }
 
   async query(sql: string, params: any[] = []): Promise<QueryResult> {
-  
-  const result = await this.client.query(sql, params);
+    const result = await this.client.query(sql, params);
 
-  console.log('SQL finished');
+    console.log('SQL finished');
 
-  return result;
-}
+    return result;
+  }
 }

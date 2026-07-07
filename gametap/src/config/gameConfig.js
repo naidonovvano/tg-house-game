@@ -17,14 +17,6 @@ export const FOOD_SIZE = 200;
 export const BUG_SPEED_MIN = 1000;
 export const BUG_SPEED_MAX = 1800;
 
-export const BUG_COLORS = [
-  0xff4d4d,
-  0x4da6ff,
-  0xb84dff
-];
+export const BUG_COLORS = [0xff4d4d, 0x4da6ff, 0xb84dff];
 
-export const FOOD_COLORS = [
-  0xffe14d,
-  0xff9933,
-  0x55dd55
-];
+export const FOOD_COLORS = [0xffe14d, 0xff9933, 0x55dd55];

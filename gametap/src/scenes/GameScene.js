@@ -15,7 +15,7 @@ import {
   BUG_SPEED_MIN,
   BUG_SPEED_MAX,
   BUG_COLORS,
-  FOOD_COLORS
+  FOOD_COLORS,
 } from "../config/gameConfig";
 
 export class GameScene extends Phaser.Scene {
@@ -29,50 +29,50 @@ export class GameScene extends Phaser.Scene {
     this.activeBug = null;
   }
   preload() {
-    this.load.image("grass", "/assets/images/background.png");
+    this.load.image("grass", "/gametap/assets/images/background.png");
   }
 
   create() {
-  this.score = 0;
-  this.timeLeft = GAME_TIME;
-  this.isGameStarted = false;
-  this.isGameOver = false;
+    this.score = 0;
+    this.timeLeft = GAME_TIME;
+    this.isGameStarted = false;
+    this.isGameOver = false;
 
-  const width = this.scale.width;
-  const height = this.scale.height;
+    const width = this.scale.width;
+    const height = this.scale.height;
 
-  this.add
-    .image(0, 0, "grass")
-    .setOrigin(0)
-    .setDisplaySize(width, height)
-    .setScrollFactor(0);
+    this.add
+      .image(0, 0, "grass")
+      .setOrigin(0)
+      .setDisplaySize(width, height)
+      .setScrollFactor(0);
 
-  this.scoreText = this.add.text(20, 20, "Score: 0", {
-    fontSize: `${HUD_FONT_SIZE}px`,
-    color: "#ffffff",
-    fontFamily: FONT_FAMILY,
-    stroke: FONT_STROKE_COLOR,
-    strokeThickness: FONT_STROKE_SIZE,
-  });
+    this.scoreText = this.add.text(20, 20, "Score: 0", {
+      fontSize: `${HUD_FONT_SIZE}px`,
+      color: "#ffffff",
+      fontFamily: FONT_FAMILY,
+      stroke: FONT_STROKE_COLOR,
+      strokeThickness: FONT_STROKE_SIZE,
+    });
 
-  this.timerText = this.add.text(20, 80, `Time: ${GAME_TIME}`, {
-    fontSize: `${HUD_FONT_SIZE}px`,
-    color: "#ffffff",
-    fontFamily: FONT_FAMILY,
-    stroke: FONT_STROKE_COLOR,
-    strokeThickness: FONT_STROKE_SIZE,
-  });
+    this.timerText = this.add.text(20, 80, `Time: ${GAME_TIME}`, {
+      fontSize: `${HUD_FONT_SIZE}px`,
+      color: "#ffffff",
+      fontFamily: FONT_FAMILY,
+      stroke: FONT_STROKE_COLOR,
+      strokeThickness: FONT_STROKE_SIZE,
+    });
 
-  if (this.hasShownStartScreen) {
-  this.startGame();
-} else {
-  this.showStartScreen();
-}
-}
+    if (this.hasShownStartScreen) {
+      this.startGame();
+    } else {
+      this.showStartScreen();
+    }
+  }
 
   spawnBug() {
     if (this.timeLeft <= 0 || this.isGameOver || !this.isGameStarted) return;
-    
+
     const width = this.scale.width;
     const height = this.scale.height;
 
@@ -81,9 +81,11 @@ export class GameScene extends Phaser.Scene {
 
     const startPoint = this.getRandomOutsidePoint();
 
-    const bug = this.add.text(startPoint.x, startPoint.y, bugEmoji, {
-      fontSize: `${BUG_SIZE}px`
-    }).setOrigin(0.5);
+    const bug = this.add
+      .text(startPoint.x, startPoint.y, bugEmoji, {
+        fontSize: `${BUG_SIZE}px`,
+      })
+      .setOrigin(0.5);
 
     bug.setInteractive({ useHandCursor: true });
 
@@ -95,9 +97,8 @@ export class GameScene extends Phaser.Scene {
 
       this.time.delayedCall(400, () => {
         this.spawnBug();
+      });
     });
-
-});
 
     this.activeBug = bug;
 
@@ -106,7 +107,7 @@ export class GameScene extends Phaser.Scene {
     for (let i = 0; i < 4; i++) {
       points.push({
         x: Phaser.Math.Between(40, width - 40),
-        y: Phaser.Math.Between(100, height - 60)
+        y: Phaser.Math.Between(100, height - 60),
       });
     }
 
@@ -136,7 +137,7 @@ export class GameScene extends Phaser.Scene {
       ease: "Sine.easeInOut",
       onComplete: () => {
         this.moveBugByPoints(bug, points, index + 1);
-      }
+      },
     });
   }
 
@@ -162,222 +163,241 @@ export class GameScene extends Phaser.Scene {
 
   spawnFood() {
     if (this.timeLeft <= 0 || this.isGameOver || !this.isGameStarted) return;
-    
+
     const width = this.scale.width;
     const height = this.scale.height;
 
     const foods = ["🐟", "🥩"];
     const foodEmoji = Phaser.Utils.Array.GetRandom(foods);
 
-    const food = this.add.text(
-      Phaser.Math.Between(50, width - 50),
-      Phaser.Math.Between(100, height - 80),
-      foodEmoji,
-      { fontSize: `${FOOD_SIZE}px` }
-    ).setOrigin(0.5);
+    const food = this.add
+      .text(
+        Phaser.Math.Between(50, width - 50),
+        Phaser.Math.Between(100, height - 80),
+        foodEmoji,
+        { fontSize: `${FOOD_SIZE}px` },
+      )
+      .setOrigin(0.5);
 
     food.setInteractive({ useHandCursor: true });
 
     food.on("pointerdown", () => {
-    this.showTapEffect(food.x, food.y, 2);
-    this.score += 2;
-    this.scoreText.setText("Score: " + this.score);
-    food.destroy();
-
-});
+      this.showTapEffect(food.x, food.y, 2);
+      this.score += 2;
+      this.scoreText.setText("Score: " + this.score);
+      food.destroy();
+    });
 
     this.time.delayedCall(2500, () => {
       if (food.active) food.destroy();
     });
   }
-    showTapEffect(x, y, points) {
-  const color = Phaser.Utils.Array.GetRandom(
-    points === 1 ? BUG_COLORS : FOOD_COLORS
-);
+  showTapEffect(x, y, points) {
+    const color = Phaser.Utils.Array.GetRandom(
+      points === 1 ? BUG_COLORS : FOOD_COLORS,
+    );
 
-const textColor = "#" + color.toString(16).padStart(6, "0");
+    const textColor = "#" + color.toString(16).padStart(6, "0");
 
-  // +1 / +2
-  const text = this.add.text(x, y - 20, `+${points}`, {
-    fontSize: `${HIT_FONT_SIZE}px`,
-    fontFamily: FONT_FAMILY,
-    color: textColor,
-    fontStyle: "bold",
-    stroke: "#000",
-    strokeThickness: 5
-  }).setOrigin(0.5);
+    // +1 / +2
+    const text = this.add
+      .text(x, y - 20, `+${points}`, {
+        fontSize: `${HIT_FONT_SIZE}px`,
+        fontFamily: FONT_FAMILY,
+        color: textColor,
+        fontStyle: "bold",
+        stroke: "#000",
+        strokeThickness: 5,
+      })
+      .setOrigin(0.5);
 
-  text.setDepth(1000);
-
-  this.tweens.add({
-    targets: text,
-    y: y - 75,
-    alpha: 0,
-    scale: 1.5,
-    duration: 600,
-    ease: "Cubic.easeOut",
-    onComplete: () => text.destroy()
-  });
-
-  // лучи
-  for (let i = 0; i < 14; i++) {
-    const angle = (Math.PI * 2 / 14) * i;
-    const length = Phaser.Math.Between(35, 75);
-
-    const ray = this.add.rectangle(x, y, length, 4, color, 0.9);
-    ray.setOrigin(0, 0.5);
-    ray.setRotation(angle);
-    ray.setDepth(999);
+    text.setDepth(1000);
 
     this.tweens.add({
-      targets: ray,
+      targets: text,
+      y: y - 75,
       alpha: 0,
-      scaleX: 1.6,
-      scaleY: 0.2,
-      duration: 450,
+      scale: 1.5,
+      duration: 600,
       ease: "Cubic.easeOut",
-      onComplete: () => ray.destroy()
+      onComplete: () => text.destroy(),
     });
+
+    // лучи
+    for (let i = 0; i < 14; i++) {
+      const angle = ((Math.PI * 2) / 14) * i;
+      const length = Phaser.Math.Between(35, 75);
+
+      const ray = this.add.rectangle(x, y, length, 4, color, 0.9);
+      ray.setOrigin(0, 0.5);
+      ray.setRotation(angle);
+      ray.setDepth(999);
+
+      this.tweens.add({
+        targets: ray,
+        alpha: 0,
+        scaleX: 1.6,
+        scaleY: 0.2,
+        duration: 450,
+        ease: "Cubic.easeOut",
+        onComplete: () => ray.destroy(),
+      });
+    }
+
+    // частицы
+    for (let i = 0; i < 24; i++) {
+      const particle = this.add.circle(
+        x,
+        y,
+        Phaser.Math.Between(4, 8),
+        color,
+        1,
+      );
+      particle.setDepth(999);
+
+      const angle = Phaser.Math.FloatBetween(0, Math.PI * 2);
+      const distance = Phaser.Math.Between(45, 110);
+
+      this.tweens.add({
+        targets: particle,
+        x: x + Math.cos(angle) * distance,
+        y: y + Math.sin(angle) * distance,
+        alpha: 0,
+        scale: 0,
+        duration: Phaser.Math.Between(450, 700),
+        ease: "Cubic.easeOut",
+        onComplete: () => particle.destroy(),
+      });
+    }
   }
-
-  // частицы
-  for (let i = 0; i < 24; i++) {
-    const particle = this.add.circle(x, y, Phaser.Math.Between(4, 8), color, 1);
-    particle.setDepth(999);
-
-    const angle = Phaser.Math.FloatBetween(0, Math.PI * 2);
-    const distance = Phaser.Math.Between(45, 110);
-
-    this.tweens.add({
-      targets: particle,
-      x: x + Math.cos(angle) * distance,
-      y: y + Math.sin(angle) * distance,
-      alpha: 0,
-      scale: 0,
-      duration: Phaser.Math.Between(450, 700),
-      ease: "Cubic.easeOut",
-      onComplete: () => particle.destroy()
-    });
-  }
-}
 
   showStartScreen() {
-  const width = this.scale.width;
-  const height = this.scale.height;
+    const width = this.scale.width;
+    const height = this.scale.height;
 
-  const overlay = this.add
-    .rectangle(width / 2, height / 2, width, height, 0x000000, 0.65)
-    .setDepth(2000);
+    const overlay = this.add
+      .rectangle(width / 2, height / 2, width, height, 0x000000, 0.65)
+      .setDepth(2000);
 
-  const title = this.add
-    .text(width / 2, height / 2 - 75, "<TAP TO DEBUG^^>", {
-      fontSize: `${GAME_OVER_FONT_SIZE}px`,
-      color: "#ffffff",
-      fontFamily: FONT_FAMILY,
-      stroke: FONT_STROKE_COLOR,
-      strokeThickness: FONT_STROKE_SIZE,
-    })
-    .setOrigin(0.5)
-    .setDepth(2001);
+    const title = this.add
+      .text(width / 2, height / 2 - 75, "<TAP TO DEBUG^.^>", {
+        fontSize: `${GAME_OVER_FONT_SIZE}px`,
+        color: "#ffffff",
+        fontFamily: FONT_FAMILY,
+        stroke: FONT_STROKE_COLOR,
+        strokeThickness: FONT_STROKE_SIZE,
+      })
+      .setOrigin(0.5)
+      .setDepth(2001);
 
-  const startText = this.add
-    .text(width / 2, height / 2 + 50, "Start", {
-      fontSize: `${SCORE_FONT_SIZE}px`,
-      color: "#ffffff",
-      fontFamily: FONT_FAMILY,
-      stroke: FONT_STROKE_COLOR,
-      strokeThickness: FONT_STROKE_SIZE,
-    })
-    .setOrigin(0.5)
-    .setDepth(2001);
+    const startText = this.add
+      .text(width / 2, height / 2 + 50, "Start", {
+        fontSize: `${SCORE_FONT_SIZE}px`,
+        color: "#ffffff",
+        fontFamily: FONT_FAMILY,
+        stroke: FONT_STROKE_COLOR,
+        strokeThickness: FONT_STROKE_SIZE,
+      })
+      .setOrigin(0.5)
+      .setDepth(2001);
 
-  startText.setInteractive({ useHandCursor: true });
+    startText.setInteractive({ useHandCursor: true });
 
-  startText.on("pointerdown", () => {
-    this.hasShownStartScreen = true;
-    overlay.destroy();
-    title.destroy();
-    startText.destroy();
+    startText.on("pointerdown", () => {
+      this.hasShownStartScreen = true;
+      overlay.destroy();
+      title.destroy();
+      startText.destroy();
 
-    this.startGame();
-  });
-}
-
-startGame() {
-  this.isGameStarted = true;
-  this.isGameOver = false;
-
-  this.spawnBug();
-
-  this.foodTimer = this.time.addEvent({
-    delay: 3000,
-    callback: this.spawnFood,
-    callbackScope: this,
-    loop: true,
-  });
-
-  this.gameTimer = this.time.addEvent({
-    delay: 1000,
-    callback: () => {
-      if (this.isGameOver || !this.isGameStarted) return;
-
-      this.timeLeft--;
-      this.timerText.setText("Time: " + this.timeLeft);
-
-      if (this.timeLeft <= 0) {
-        this.endGame();
-      }
-    },
-    callbackScope: this,
-    loop: true,
-  });
-}
-
-  endGame() {
-  if (this.isGameOver) return;
-
-  this.isGameOver = true;
-
-  const width = this.scale.width;
-  const height = this.scale.height;
-
-  if (this.activeBug?.active) {
-    this.activeBug.destroy();
+      this.startGame();
+    });
   }
 
-  this.tweens.killAll();
+  startGame() {
+    this.isGameStarted = true;
+    this.isGameOver = false;
 
-  this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.65)
-    .setDepth(2000);
+    this.spawnBug();
 
-  this.add.text(width / 2, height / 2 - 90, "GAME OVER", {
-    fontSize: `${GAME_OVER_FONT_SIZE}px`,
-    color: "#ffffff",
-    fontFamily: FONT_FAMILY,
-    stroke: FONT_STROKE_COLOR,
-    strokeThickness: FONT_STROKE_SIZE
-  }).setOrigin(0.5).setDepth(2001);
+    this.foodTimer = this.time.addEvent({
+      delay: 3000,
+      callback: this.spawnFood,
+      callbackScope: this,
+      loop: true,
+    });
 
-  this.add.text(width / 2, height / 2 - 20, "Score: " + this.score, {
-    fontSize: `${SCORE_FONT_SIZE}px`,
-    color: "#ffffff",
-    fontFamily: FONT_FAMILY,
-    stroke: FONT_STROKE_COLOR,
-    strokeThickness: FONT_STROKE_SIZE
-  }).setOrigin(0.5).setDepth(2001);
+    this.gameTimer = this.time.addEvent({
+      delay: 1000,
+      callback: () => {
+        if (this.isGameOver || !this.isGameStarted) return;
 
-  const restartText = this.add.text(width / 2, height / 2 + 80, "Tap to restart", {
-    fontSize: `${HUD_FONT_SIZE}px`,
-    color: "#ffffff",
-    fontFamily: FONT_FAMILY,
-    stroke: FONT_STROKE_COLOR,
-    strokeThickness: FONT_STROKE_SIZE
-  }).setOrigin(0.5).setDepth(2001);
+        this.timeLeft--;
+        this.timerText.setText("Time: " + this.timeLeft);
 
-  restartText.setInteractive({ useHandCursor: true });
+        if (this.timeLeft <= 0) {
+          this.endGame();
+        }
+      },
+      callbackScope: this,
+      loop: true,
+    });
+  }
 
-  restartText.on("pointerdown", () => {
-    this.scene.restart();
-  });
-}
+  endGame() {
+    if (this.isGameOver) return;
+
+    this.isGameOver = true;
+
+    const width = this.scale.width;
+    const height = this.scale.height;
+
+    if (this.activeBug?.active) {
+      this.activeBug.destroy();
+    }
+
+    this.tweens.killAll();
+
+    this.add
+      .rectangle(width / 2, height / 2, width, height, 0x000000, 0.65)
+      .setDepth(2000);
+
+    this.add
+      .text(width / 2, height / 2 - 90, "GAME OVER", {
+        fontSize: `${GAME_OVER_FONT_SIZE}px`,
+        color: "#ffffff",
+        fontFamily: FONT_FAMILY,
+        stroke: FONT_STROKE_COLOR,
+        strokeThickness: FONT_STROKE_SIZE,
+      })
+      .setOrigin(0.5)
+      .setDepth(2001);
+
+    this.add
+      .text(width / 2, height / 2 - 20, "Score: " + this.score, {
+        fontSize: `${SCORE_FONT_SIZE}px`,
+        color: "#ffffff",
+        fontFamily: FONT_FAMILY,
+        stroke: FONT_STROKE_COLOR,
+        strokeThickness: FONT_STROKE_SIZE,
+      })
+      .setOrigin(0.5)
+      .setDepth(2001);
+
+    const restartText = this.add
+      .text(width / 2, height / 2 + 80, "Tap to restart", {
+        fontSize: `${HUD_FONT_SIZE}px`,
+        color: "#ffffff",
+        fontFamily: FONT_FAMILY,
+        stroke: FONT_STROKE_COLOR,
+        strokeThickness: FONT_STROKE_SIZE,
+      })
+      .setOrigin(0.5)
+      .setDepth(2001);
+
+    restartText.setInteractive({ useHandCursor: true });
+
+    restartText.on("pointerdown", () => {
+      this.scene.restart();
+    });
+  }
 }

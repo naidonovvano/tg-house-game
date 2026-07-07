@@ -58,10 +58,10 @@ The first build may take a few minutes because Docker needs to download the requ
 
 After the containers are started, the following services will be available:
 
-| Service | URL |
-|---------|-----|
+| Service                   | URL                   |
+| ------------------------- | --------------------- |
 | Frontend (React + NestJS) | http://localhost:3000 |
-| pgAdmin | http://localhost:5050 |
+| pgAdmin                   | http://localhost:5050 |
 
 ---
 

@@ -10,7 +10,19 @@ COPY frontend/ .
 RUN npm run build
 
 
-# ---------- Stage 2: Build Backend ----------
+# ---------- Stage 2: Build GameTap ----------
+FROM node:22-alpine AS gametap-builder
+
+WORKDIR /gametap
+
+COPY gametap/package*.json ./
+RUN npm install
+
+COPY gametap/ .
+RUN npm run build
+
+
+# ---------- Stage 3: Build Backend ----------
 FROM node:22-alpine AS backend-builder
 
 WORKDIR /backend
@@ -22,7 +34,7 @@ COPY backend/ .
 RUN npm run build
 
 
-# ---------- Stage 3: Production ----------
+# ---------- Stage 4: Production ----------
 FROM node:22-alpine
 
 WORKDIR /app
@@ -34,6 +46,7 @@ COPY --from=backend-builder /backend/dist ./dist
 COPY --from=backend-builder /backend/.env.docker ./.env.docker
 
 COPY --from=frontend-builder /frontend/dist ./frontend/dist
+COPY --from=gametap-builder /gametap/dist ./frontend/dist/gametap
 
 EXPOSE 3000
 

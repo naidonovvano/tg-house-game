@@ -1,0 +1,11 @@
+node_modules
+dist
+coverage
+.firebase
+.git
+
+backend/dist
+frontend/dist
+gametap/dist
+
+package-lock.json
