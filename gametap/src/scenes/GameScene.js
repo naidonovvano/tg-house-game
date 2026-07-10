@@ -1,7 +1,6 @@
 import Phaser from "phaser";
 
 import {
-  BACKGROUND_COLOR,
   FONT_FAMILY,
   HUD_FONT_SIZE,
   HIT_FONT_SIZE,
