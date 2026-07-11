@@ -11,6 +11,7 @@ import {
   GAME_TIME,
   BUG_SIZE,
   FOOD_SIZE,
+  TURN_DURATION,
   BUG_SPEED_MIN,
   BUG_SPEED_MAX,
   BUG_COLORS,
@@ -164,38 +165,43 @@ export class GameScene extends Phaser.Scene {
 
   const nextPoint = points[index];
 
-  const angle = Phaser.Math.Angle.Between(
+  const movementAngle = Phaser.Math.Angle.Between(
     bug.x,
     bug.y,
     nextPoint.x,
     nextPoint.y,
   );
 
-  // PNG жука изначально смотрит головой вверх.
-  // Добавляем 90°, чтобы голова всегда была направлена по движению.
-  bug.setRotation(angle + Math.PI / 2);
+  // PNG жука изначально направлен головой вверх.
+  const targetRotation = movementAngle + Math.PI / 2;
+
+  // Выбираем кратчайшее направление поворота.
+  const shortestRotation =
+    bug.rotation +
+    Phaser.Math.Angle.Wrap(targetRotation - bug.rotation);
+
+  
 
   this.tweens.add({
-    targets: bug,
-    x: nextPoint.x,
-    y: nextPoint.y,
+  targets: bug,
+  rotation: shortestRotation,
+  duration: 300,
+  ease: "Sine.easeInOut",
+});
 
-    // Увеличиваем duration в 2 раза → скорость уменьшается в 2 раза.
-    duration: Phaser.Math.Between(
-      BUG_SPEED_MIN * 2,
-      BUG_SPEED_MAX * 2,
-    ),
-
-    ease: "Sine.easeInOut",
-
-    onComplete: () => {
-      this.moveBugByPoints(
-        bug,
-        points,
-        index + 1,
-      );
-    },
-  });
+this.tweens.add({
+  targets: bug,
+  x: nextPoint.x,
+  y: nextPoint.y,
+  duration: Phaser.Math.Between(
+    BUG_SPEED_MIN * 2,
+    BUG_SPEED_MAX * 2,
+  ),
+  ease: "Sine.easeInOut",
+  onComplete: () => {
+    this.moveBugByPoints(bug, points, index + 1);
+  },
+});
 }
 
   getRandomOutsidePoint() {
@@ -250,6 +256,7 @@ export class GameScene extends Phaser.Scene {
       if (food.active) food.destroy();
     });
   }
+
   showTapEffect(x, y, points) {
     const color = Phaser.Utils.Array.GetRandom(
       points === 1 ? BUG_COLORS : FOOD_COLORS,

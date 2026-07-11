@@ -14,6 +14,8 @@ export const GAME_TIME = 30;
 export const BUG_SIZE = 175;
 export const FOOD_SIZE = 250;
 
+export const TURN_DURATION = 250;
+
 export const BUG_SPEED_MIN = 1000;
 export const BUG_SPEED_MAX = 1800;
 
