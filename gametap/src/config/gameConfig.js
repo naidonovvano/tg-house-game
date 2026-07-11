@@ -11,8 +11,8 @@ export const FONT_STROKE_SIZE = 10;
 
 export const GAME_TIME = 30;
 
-export const BUG_SIZE = 200;
-export const FOOD_SIZE = 200;
+export const BUG_SIZE = 175;
+export const FOOD_SIZE = 250;
 
 export const BUG_SPEED_MIN = 1000;
 export const BUG_SPEED_MAX = 1800;

@@ -28,8 +28,43 @@ export class GameScene extends Phaser.Scene {
     this.activeBug = null;
   }
   preload() {
-    this.load.image("grass", "/gametap/assets/images/background.png");
-  }
+  this.load.image("grass", "/gametap/assets/images/background.png");
+
+  this.load.image(
+    "carabid",
+    "/gametap/assets/images/bugs/beetle1_carabid.png",
+  );
+
+  this.load.image(
+    "rosechafer",
+    "/gametap/assets/images/bugs/beetle2_rosechafer.png",
+  );
+
+  this.load.image(
+    "longhorn",
+    "/gametap/assets/images/bugs/beetle3_longhorn.png",
+  );
+
+  this.load.image(
+    "ladybug",
+    "/gametap/assets/images/bugs/beetle4_ladybug.png",
+  );
+
+  this.load.image(
+    "chicken",
+    "/gametap/assets/images/food/food1_chicken.png",
+  );
+
+  this.load.image(
+    "beef",
+    "/gametap/assets/images/food/food2_beef.png",
+  );
+
+  this.load.image(
+    "fish",
+    "/gametap/assets/images/food/food3_fish.png",
+  );
+}
 
   create() {
     this.score = 0;
@@ -75,16 +110,15 @@ export class GameScene extends Phaser.Scene {
     const width = this.scale.width;
     const height = this.scale.height;
 
-    const bugs = ["🪲", "🪳", "🕷️"];
-    const bugEmoji = Phaser.Utils.Array.GetRandom(bugs);
+    const bugTextures = ["carabid", "rosechafer", "longhorn", "ladybug"];
+    const bugTexture = Phaser.Utils.Array.GetRandom(bugTextures);
 
     const startPoint = this.getRandomOutsidePoint();
 
     const bug = this.add
-      .text(startPoint.x, startPoint.y, bugEmoji, {
-        fontSize: `${BUG_SIZE}px`,
-      })
-      .setOrigin(0.5);
+      .image(startPoint.x, startPoint.y, bugTexture)
+      .setOrigin(0.5)
+      .setDisplaySize(BUG_SIZE, BUG_SIZE);
 
     bug.setInteractive({ useHandCursor: true });
 
@@ -116,29 +150,53 @@ export class GameScene extends Phaser.Scene {
   }
 
   moveBugByPoints(bug, points, index) {
-    if (!bug.active || index >= points.length) {
-      if (bug.active) bug.destroy();
-
-      this.time.delayedCall(500, () => {
-        this.spawnBug();
-      });
-
-      return;
+  if (!bug.active || index >= points.length) {
+    if (bug.active) {
+      bug.destroy();
     }
 
-    const nextPoint = points[index];
-
-    this.tweens.add({
-      targets: bug,
-      x: nextPoint.x,
-      y: nextPoint.y,
-      duration: Phaser.Math.Between(BUG_SPEED_MIN, BUG_SPEED_MAX),
-      ease: "Sine.easeInOut",
-      onComplete: () => {
-        this.moveBugByPoints(bug, points, index + 1);
-      },
+    this.time.delayedCall(500, () => {
+      this.spawnBug();
     });
+
+    return;
   }
+
+  const nextPoint = points[index];
+
+  const angle = Phaser.Math.Angle.Between(
+    bug.x,
+    bug.y,
+    nextPoint.x,
+    nextPoint.y,
+  );
+
+  // PNG жука изначально смотрит головой вверх.
+  // Добавляем 90°, чтобы голова всегда была направлена по движению.
+  bug.setRotation(angle + Math.PI / 2);
+
+  this.tweens.add({
+    targets: bug,
+    x: nextPoint.x,
+    y: nextPoint.y,
+
+    // Увеличиваем duration в 2 раза → скорость уменьшается в 2 раза.
+    duration: Phaser.Math.Between(
+      BUG_SPEED_MIN * 2,
+      BUG_SPEED_MAX * 2,
+    ),
+
+    ease: "Sine.easeInOut",
+
+    onComplete: () => {
+      this.moveBugByPoints(
+        bug,
+        points,
+        index + 1,
+      );
+    },
+  });
+}
 
   getRandomOutsidePoint() {
     const width = this.scale.width;
@@ -166,17 +224,18 @@ export class GameScene extends Phaser.Scene {
     const width = this.scale.width;
     const height = this.scale.height;
 
-    const foods = ["🐟", "🥩"];
-    const foodEmoji = Phaser.Utils.Array.GetRandom(foods);
+    const foodTextures = ["chicken", "beef", "fish"];
+    const foodTexture =
+    Phaser.Utils.Array.GetRandom(foodTextures);
 
     const food = this.add
-      .text(
-        Phaser.Math.Between(50, width - 50),
-        Phaser.Math.Between(100, height - 80),
-        foodEmoji,
-        { fontSize: `${FOOD_SIZE}px` },
-      )
-      .setOrigin(0.5);
+    .image(
+      Phaser.Math.Between(50, width - 50),
+      Phaser.Math.Between(100, height - 80),
+      foodTexture
+    )
+    .setOrigin(0.5)
+    .setDisplaySize(FOOD_SIZE, FOOD_SIZE);
 
     food.setInteractive({ useHandCursor: true });
 
