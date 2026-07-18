@@ -2,7 +2,7 @@ import {
   FaYoutube,
   FaInstagram,
   FaTelegramPlane,
-  FaGamepad,
+  // FaGamepad,
 } from "react-icons/fa";
 
 import logo from "../assets/logo.jpeg";
@@ -38,10 +38,10 @@ export default function SocialLinks() {
           <FaTelegramPlane />
           <span>@monet_manet</span>
         </a>
-        <a href="/gametap/">
+        {/* <a href="/gametap/">
           <FaGamepad />
           <span>Tap to debug^.^</span>
-        </a>
+        </a> */}
       </div>
     </div>
   );
