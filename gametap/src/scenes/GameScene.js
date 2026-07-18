@@ -185,7 +185,7 @@ export class GameScene extends Phaser.Scene {
   this.tweens.add({
   targets: bug,
   rotation: shortestRotation,
-  duration: 300,
+  duration: TURN_DURATION,
   ease: "Sine.easeInOut",
 });
 

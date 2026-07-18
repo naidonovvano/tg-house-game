@@ -1,8 +1,8 @@
 {
   "scripts": {
     "dev": "concurrently --names frontend,gametap --prefix-colors blue,green \"npm --prefix frontend run dev -- --host 0.0.0.0\" \"npm --prefix gametap run dev -- --host 0.0.0.0\"",
-    "build:frontend": "cd frontend && npm install && npm run build",
-    "build:gametap": "cd gametap && npm install && npm run build",
+    "build:frontend": "npm --prefix frontend ci && npm --prefix frontend run build",
+    "build:gametap": "npm --prefix gametap ci && npm --prefix gametap run build",
     "prepare:firebase": "rm -rf firebase-public && mkdir -p firebase-public/gametap && cp -R frontend/dist/* firebase-public/ && cp -R gametap/dist/* firebase-public/gametap/",
     "build:hosting": "npm run build:frontend && npm run build:gametap && npm run prepare:firebase",
     "deploy": "npm run build:hosting && npx firebase-tools deploy",

@@ -9,7 +9,6 @@ import { DatabaseModule } from './database/database.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: process.env.NODE_ENV === 'docker' ? '.env.docker' : '.env',
     }),
 
     ServeStaticModule.forRoot({

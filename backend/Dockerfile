@@ -43,7 +43,6 @@ COPY --from=backend-builder /backend/package*.json ./
 RUN npm install --omit=dev
 
 COPY --from=backend-builder /backend/dist ./dist
-COPY --from=backend-builder /backend/.env.docker ./.env.docker
 
 COPY --from=frontend-builder /frontend/dist ./frontend/dist
 COPY --from=gametap-builder /gametap/dist ./frontend/dist/gametap
