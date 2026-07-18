@@ -34,12 +34,26 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@test.com}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:?Set PGADMIN_DEFAULT_PASSWORD in .env}
+      PGADMIN_SERVER_JSON_FILE: /tmp/servers.json
+      PGADMIN_REPLACE_SERVERS_ON_STARTUP: "True"
+      DB_HOST: ${DB_HOST:-postgres}
+      DB_PORT: ${DB_PORT:-5432}
+      POSTGRES_USER: ${POSTGRES_USER:-gameuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-game_db}
 
     ports:
       - "5050:80"
 
     volumes:
       - pgadmin_data:/var/lib/pgadmin
+      - ./pgadmin/bootstrap.sh:/pgadmin4/bootstrap.sh:ro
+
+    entrypoint: ["/bin/sh", "/pgadmin4/bootstrap.sh"]
+
+    depends_on:
+      postgres:
+        condition: service_healthy
 
   backend:
     build:
