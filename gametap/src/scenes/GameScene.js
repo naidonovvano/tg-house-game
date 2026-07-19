@@ -9,13 +9,12 @@ import {
   FONT_STROKE_COLOR,
   FONT_STROKE_SIZE,
   GAME_TIME,
-  BUG_SIZE,
-  FOOD_SIZE,
   TURN_DURATION,
   BUG_SPEED_MIN,
   BUG_SPEED_MAX,
   BUG_COLORS,
   FOOD_COLORS,
+  getResponsiveSizes,
 } from "../config/gameConfig";
 
 export class GameScene extends Phaser.Scene {
@@ -75,6 +74,7 @@ export class GameScene extends Phaser.Scene {
 
     const width = this.scale.width;
     const height = this.scale.height;
+    this.responsiveSizes = getResponsiveSizes(width, height);
 
     this.add
       .image(0, 0, "grass")
@@ -83,19 +83,19 @@ export class GameScene extends Phaser.Scene {
       .setScrollFactor(0);
 
     this.scoreText = this.add.text(20, 20, "Score: 0", {
-      fontSize: `${HUD_FONT_SIZE}px`,
+      fontSize: `${this.responsiveSizes.hudFontSize}px`,
       color: "#ffffff",
       fontFamily: FONT_FAMILY,
       stroke: FONT_STROKE_COLOR,
-      strokeThickness: FONT_STROKE_SIZE,
+      strokeThickness: this.responsiveSizes.fontStrokeSize,
     });
 
     this.timerText = this.add.text(20, 80, `Time: ${GAME_TIME}`, {
-      fontSize: `${HUD_FONT_SIZE}px`,
+      fontSize: `${this.responsiveSizes.hudFontSize}px`,
       color: "#ffffff",
       fontFamily: FONT_FAMILY,
       stroke: FONT_STROKE_COLOR,
-      strokeThickness: FONT_STROKE_SIZE,
+      strokeThickness: this.responsiveSizes.fontStrokeSize,
     });
 
     if (this.hasShownStartScreen) {
@@ -119,7 +119,10 @@ export class GameScene extends Phaser.Scene {
     const bug = this.add
       .image(startPoint.x, startPoint.y, bugTexture)
       .setOrigin(0.5)
-      .setDisplaySize(BUG_SIZE, BUG_SIZE);
+      .setDisplaySize(
+        this.responsiveSizes.bugSize,
+        this.responsiveSizes.bugSize,
+      );
 
     bug.setInteractive({ useHandCursor: true });
 
@@ -172,10 +175,8 @@ export class GameScene extends Phaser.Scene {
     nextPoint.y,
   );
 
-  // PNG жука изначально направлен головой вверх.
   const targetRotation = movementAngle + Math.PI / 2;
 
-  // Выбираем кратчайшее направление поворота.
   const shortestRotation =
     bug.rotation +
     Phaser.Math.Angle.Wrap(targetRotation - bug.rotation);
@@ -241,7 +242,10 @@ this.tweens.add({
       foodTexture
     )
     .setOrigin(0.5)
-    .setDisplaySize(FOOD_SIZE, FOOD_SIZE);
+    .setDisplaySize(
+      this.responsiveSizes.foodSize,
+      this.responsiveSizes.foodSize,
+    );
 
     food.setInteractive({ useHandCursor: true });
 
@@ -264,7 +268,6 @@ this.tweens.add({
 
     const textColor = "#" + color.toString(16).padStart(6, "0");
 
-    // +1 / +2
     const text = this.add
       .text(x, y - 20, `+${points}`, {
         fontSize: `${HIT_FONT_SIZE}px`,
@@ -288,7 +291,6 @@ this.tweens.add({
       onComplete: () => text.destroy(),
     });
 
-    // лучи
     for (let i = 0; i < 14; i++) {
       const angle = ((Math.PI * 2) / 14) * i;
       const length = Phaser.Math.Between(35, 75);
@@ -309,7 +311,6 @@ this.tweens.add({
       });
     }
 
-    // частицы
     for (let i = 0; i < 24; i++) {
       const particle = this.add.circle(
         x,
@@ -346,11 +347,11 @@ this.tweens.add({
 
     const title = this.add
       .text(width / 2, height / 2 - 75, "<TAP TO DEBUG^.^>", {
-        fontSize: `${GAME_OVER_FONT_SIZE}px`,
+        fontSize: `${this.responsiveSizes.gameOverFontSize}px`,
         color: "#ffffff",
         fontFamily: FONT_FAMILY,
         stroke: FONT_STROKE_COLOR,
-        strokeThickness: FONT_STROKE_SIZE,
+        strokeThickness: this.responsiveSizes.fontStrokeSize,
       })
       .setOrigin(0.5)
       .setDepth(2001);
